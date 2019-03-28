@@ -1,0 +1,117 @@
+﻿<Window
+    x:Class="E2032.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:local="clr-namespace:E2032"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d"
+    Title="MainWindow">
+
+    <Window.Resources>
+        <dxg:PrintGroupPositionToBorderConverter x:Key="PrintGroupPositionToBorderConverter" />
+        <dx:StringToVisibilityConverter x:Key="StringToVisibitityConverter" />
+        <dxg:PrintGroupRowSeparatorThicknessConverter x:Key="PrintGroupRowSeparatorThicknessConverter" />
+        <local:RemoveParenthesesConverter x:Key="parenthesesConverter" />
+        <local:PrintRowInfoToImageSourceConverter x:Key="PrintRowInfoToImageSourceConverter" />
+        <DataTemplate x:Key="PrintGroupRowTemplate">
+            <StackPanel Orientation="Horizontal">
+                <dxg:CellFillControl Style="{Binding Path=Content.(dxg:GridPrintingHelper.PrintRowInfo).PrintRowIndentStyle}" />
+                <dxg:FixedTotalSummaryPrintPanel Width="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).CaptionCell.Width}" ChildToFill="{Binding ElementName=PART_EditSeparator}">
+                    <dxg:PrintTextEdit
+                        x:Name="PART_EditLeft"
+                        HorizontalAlignment="Left"
+                        BorderThickness="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).CaptionCell, Converter={StaticResource PrintGroupPositionToBorderConverter}}"
+                        DetailLevel="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).CaptionCell.DetailLevel}"
+                        EditValue="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).CaptionCell.Text, Mode=OneWay}"
+                        IsBottomRow="True"
+                        IsTopBorderVisible="True"
+                        Style="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).CaptionCell.PrintGroupRowStyle}"
+                        Visibility="{Binding EditValue, RelativeSource={RelativeSource Self}, Converter={StaticResource StringToVisibitityConverter}}" />
+                    <dxe:ImageEdit
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Left"
+                        BorderThickness="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell, Converter={StaticResource PrintGroupRowSeparatorThicknessConverter}}"
+                        IsPrintingMode="True"
+                        Source="{Binding Path=Content.GroupValue.Value, Converter={StaticResource PrintRowInfoToImageSourceConverter}}"
+                        Style="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell.PrintGroupRowStyle}" />
+                    <dxg:PrintTextEdit
+                        x:Name="PART_EditSeparator"
+                        HorizontalAlignment="Stretch"
+                        BorderThickness="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell, Converter={StaticResource PrintGroupRowSeparatorThicknessConverter}}"
+                        DetailLevel="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell.DetailLevel}"
+                        IsBottomRow="True"
+                        IsTopBorderVisible="True"
+                        Style="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell.PrintGroupRowStyle}" />
+                    <dxg:PrintTextEdit
+                        x:Name="PART_EditRight"
+                        HorizontalAlignment="Right"
+                        BorderThickness="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell, Converter={StaticResource PrintGroupPositionToBorderConverter}}"
+                        DetailLevel="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell.DetailLevel}"
+                        EditValue="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell.Text, Mode=OneWay, Converter={StaticResource parenthesesConverter}}"
+                        IsBottomRow="True"
+                        IsTopBorderVisible="True"
+                        Style="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).FirstColumnCell.PrintGroupRowStyle}"
+                        Visibility="{Binding EditValue, RelativeSource={RelativeSource Self}, Converter={StaticResource StringToVisibitityConverter}}" />
+                </dxg:FixedTotalSummaryPrintPanel>
+                <dxg:PrintingGroupItemsControl ItemsSource="{Binding Path=Content.(dxg:GridPrintingHelper.PrintGroupRowInfo).GroupCells}">
+                    <dxg:PrintingGroupItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <dxg:PrintTextEdit
+                                Width="{Binding Width}"
+                                HorizontalContentAlignment="Left"
+                                BorderThickness="{Binding Converter={StaticResource PrintGroupPositionToBorderConverter}}"
+                                DetailLevel="{Binding DetailLevel}"
+                                EditValue="{Binding Text, Mode=OneWay}"
+                                IsBottomRow="True"
+                                IsTopBorderVisible="True"
+                                Style="{Binding PrintGroupRowStyle}" />
+                        </DataTemplate>
+                    </dxg:PrintingGroupItemsControl.ItemTemplate>
+                    <dxg:PrintingGroupItemsControl.ItemsPanel>
+                        <ControlTemplate>
+                            <dx:StackVisibleIndexPanel ArrangeAccordingToVisibleIndex="True" Orientation="Horizontal" />
+                        </ControlTemplate>
+                    </dxg:PrintingGroupItemsControl.ItemsPanel>
+                </dxg:PrintingGroupItemsControl>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <local:MainWindowViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <dxg:GridControl ItemsSource="{Binding Items}">
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="view" PrintGroupRowTemplate="{StaticResource PrintGroupRowTemplate}" />
+            </dxg:GridControl.View>
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn FieldName="ID" />
+                <dxg:GridColumn FieldName="Name" />
+                <dxg:GridColumn FieldName="Value" />
+                <dxg:GridColumn FieldName="Category" GroupIndex="0" />
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.GroupSummary>
+                <dxg:GridSummaryItem FieldName="Value" SummaryType="Sum" />
+                <dxg:GridSummaryItem ShowInColumn="Name" SummaryType="Count" />
+            </dxg:GridControl.GroupSummary>
+        </dxg:GridControl>
+        <Button
+            Grid.Row="1"
+            Command="{Binding Commands.ShowPrintPreview, ElementName=view}"
+            Content="Show Print Preview" />
+    </Grid>
+
+</Window>
