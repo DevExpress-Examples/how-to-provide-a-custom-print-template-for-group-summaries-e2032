@@ -7,4 +7,4 @@
 <!-- default file list end -->
 # How to provide a custom print template  for group summaries
 
-This example demonstrates how to use the [PrintGroupRowTemplate](https://documentation.devexpress.com/WPF/DevExpress.Xpf.Grid.GridViewBase.PrintGroupRowTemplate.property) property to customize group summaries print preview by adding images to group rows and removing parentheses from group summary values.
+This example demonstrates how to use the [PrintGroupRowTemplate](https://documentation.devexpress.com/WPF/DevExpress.Xpf.Grid.GridViewBase.PrintGroupRowTemplate.property) property to customize group summaries' print preview by adding images to group rows and removing parentheses from group summary values.
