@@ -1,14 +1,13 @@
 <!-- default file list -->
 *Files to look at*:
 
-* [Window1.xaml](./CS/Window1.xaml) (VB: [Window1.xaml.vb](./VB/Window1.xaml.vb))
-* [Window1.xaml.cs](./CS/Window1.xaml.cs) (VB: [Window1.xaml.vb](./VB/Window1.xaml.vb))
+* [MainWindow.xaml](./CS/E2032/MainWindow.xaml) (VB: [MainWindow.xaml](./VB/E2032/MainWindow.xaml))
+* [MainWindowViewModel.xaml.cs](./CS/E2032/MainWindowViewModel.xaml.cs) (VB: [MainWindowViewModel.xaml.vb](./VB/E2032/MainWindowViewModel.xaml.vb))
+* [Converters.cs](./CS/E2032/Converters.cs) (VB: [MainWindow.xaml.vb](./VB/E2032/Converters.vb))
 <!-- default file list end -->
 # How to provide a custom print template  for group summaries
 
 
-<p>The following example demonstrates how to align group summaries to the right edge of paper when printing a DXGrid control with groups.</p>
+<p>This example demonstrates how to use the [PrintGroupRowTemplate](https://documentation.devexpress.com/WPF/DevExpress.Xpf.Grid.GridViewBase.PrintGroupRowTemplate.property) property to customize group summaries print preview by adding images to group rows and removing parentheses from group summary values. </p>
 
 <br/>
-
-
